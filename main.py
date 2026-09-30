@@ -13,8 +13,9 @@ handler = logging.FileHandler(
     encoding="utf-8",
     mode="w")
 intents = discord.Intents.default()
+intents.message_content = True
 
-bot = commands.Bot(command_prefix="/", intents=intents)
+bot = commands.Bot(command_prefix="!", intents=intents)
 ALLOWED_USER_ID = 583206969544802315 # nafisyn
 
 @bot.event
@@ -22,21 +23,15 @@ async def on_ready():
     await bot.tree.sync()
     print(f"{bot.user.name} is online")
 
-@bot.tree.command(
-        name="say",
-         description=f"Make the bot say something"
-         )
+@bot.command()
 async def say(
-    interaction: discord.Interaction,
-     message: str
+    ctx, *, message: str
      ):
-    if interaction.user.id != ALLOWED_USER_ID:
-        await interaction.response.send_message(
-            "Only nafisyn can use this command idiot",
-            ephemeral=True
-        )
+    if ctx.author.id != ALLOWED_USER_ID:
+        await ctx.message.delete()
         return
-    
-    await interaction.response.send_message(message)
+
+    await ctx.message.delete()
+    await ctx.send(message)
 
 bot.run(token, log_handler=handler, log_level=logging.DEBUG)
