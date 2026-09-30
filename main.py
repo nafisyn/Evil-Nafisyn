@@ -24,7 +24,7 @@ async def on_ready():
     print(f"{bot.user.name} is online")
 
 @bot.command()
-async def say(
+async def nafisay(
     ctx, *, message: str
      ):
     if ctx.author.id != ALLOWED_USER_ID:
